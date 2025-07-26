@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import Header from './layout/Header'
 import Sidebar from './layout/Sidebar'
 import FilterControls from './ui/FilterControls'
@@ -6,6 +7,8 @@ import DepartmentsChart from './charts/DepartmentsChart'
 import OfficesChart from './charts/OfficesChart'
 import GenderChart from './charts/GenderChart'
 import ContractTypesChart from './charts/ContractTypesChart'
+import ChatBar from './chat/ChatBar'
+import TIRAAnswer from './chat/TIRAAnswer'
 
 const Dashboard = () => {
   return (
@@ -22,6 +25,8 @@ const Dashboard = () => {
 }
 
 const MainContent = () => {
+  const [showAnswer, setShowAnswer] = useState(false);
+
   return (
     <div className="flex-1 p-6 overflow-auto">
       <div className="mb-8">
@@ -44,11 +49,19 @@ const MainContent = () => {
           </div>
         </div>
         
-        <FilterControls />
+        {!showAnswer && <FilterControls />}
       </div>
       
-      <KPICards />
-      <Charts />
+      <ChatBar onAsk={() => setShowAnswer(true)} />
+      
+      {showAnswer ? (
+        <TIRAAnswer onClose={() => setShowAnswer(false)} />
+      ) : (
+        <>
+          <KPICards />
+          <Charts />
+        </>
+      )}
     </div>
   )
 }
